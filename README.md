@@ -18,7 +18,8 @@ If you want a production like web server, use ```yarn start```.
 
 For now the default port is `3000`, therefore to test that the API is running just go to `http://localhost:3000`.
 
-### More informations
+## More informations
 
-I made this API by following this tutorial:
-https://codeburst.io/lets-build-a-rest-api-with-koa-js-and-test-with-jest-2634c14394d3
+I made this API by following those tutorials:
+- https://codeburst.io/lets-build-a-rest-api-with-koa-js-and-test-with-jest-2634c14394d3
+- https://codeburst.io/lets-build-an-api-with-koa-part-2-34d943e900a1
