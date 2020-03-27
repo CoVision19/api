@@ -1,0 +1,16 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "API to get COVID-19 data",
+  "main": "app.js",
+  "repository": "git@github.com:CoVision19/api.git",
+  "author": "Thomas Hedoux <thomas.hedoux@epitech.eu>",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.11.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  }
+}
