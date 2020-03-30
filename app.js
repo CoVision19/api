@@ -9,14 +9,17 @@ require('./routes/home')({ router });
 
 // CONFIG //
 const port = 3000;
+const refreshCacheRateInMs = 5000;
 
-// CACHE
+// CACHE //
 //controller.CacheController.CreateCache(2020, 1, 22);
 controller.CacheController.CreateCache(2020, 3, 27);
-let cache = controller.CacheController.GetCache();
-cache.refreshCache();
+controller.CacheController.GetCache().refreshCache();
+setInterval(function() {
+	controller.CacheController.GetCache().refreshCache();
+}, refreshCacheRateInMs);
 
-// HTTP SERVER
+// HTTP SERVER //
 app.use(Logger());
 app.use(router.routes());
 app.use(router.allowedMethods());

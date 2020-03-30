@@ -5,7 +5,7 @@ class CacheController {
 		this.startDate = new Date(startYear, startMonth - 1, startDay);
 		this.baseURL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/';
 		this.lastTimeFetched = null;
-		this.data = null;
+		this.data = {};
 	}
 
 	// Singleton functions
@@ -22,7 +22,7 @@ class CacheController {
 	}
 
 	refreshCache() {
-		var tmpDate = this.startDate;
+		var tmpDate = new Date(this.startDate);
 		var today = new Date();
 		var promises = [];
 		console.log('Fetching COVID-19 data from ' + tmpDate + ' to ' + today + '...');
@@ -34,11 +34,10 @@ class CacheController {
 			tmpDate.setHours(tmpDate.getHours() + 24);
 		}
 		Promise.all(promises).then(res => {
-			let obj = {};
 			res.forEach(elem => {
-				obj[elem.date] = elem.content;
+				if (elem.content !== null || !(this.data[elem.date]))
+					this.data[elem.date] = elem.content;
 			});
-			this.data = obj;
 			this.lastTimeFetched = new Date();
 			console.log('Cache built at ' + this.lastTimeFetched + '!\n');
 		}).catch(err => {
