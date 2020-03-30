@@ -1,3 +1,4 @@
+const controller = require('../controllers/cacheController');
 
 module.exports = ({ router }) => {
 
@@ -8,9 +9,10 @@ module.exports = ({ router }) => {
 
 		ctx.body = {
 			message: 'CoVision19 API up and running! No data fetched yet.',
-			status: 'not-ready',
 			date: date,
-			time: time
+			time: time,
+			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched,
+			cache: controller.CacheController.GetCache().data
 		};
 	});
 }
