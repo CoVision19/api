@@ -14,11 +14,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Docker Build & Push
-      uses: mr-smithers-excellent/docker-build-push@v2
+    - name: Cloud Run with docker build and push to GCR
+      uses: passionkind/action-cloud-run@1.5
       with:
-        image: api
-        tag: latest
-        registry: gcr.io/covision19
-        username: ${{ secrets.DOCKER_DEPLOY_USER }}
-        password: ${{ secrets.DOCKER_DEPLOY_PWD }}
+        # Set to true to check if working_directory has changes since the previous commit
+        check_if_changed: false
+        # Directory where the Dockerfile is to be found
+        working_directory: ./ 
+        # Cloud run service name
+        service_name: api-runner
+        # GCP service key with storage and run permissions
+        gcp_service_key: ${{ secrets.DOCKER_DEPLOY_PWD }}
+        # GCP project
+        project: covision19
+        # GCP Registry (e.g. 'eu.gcr.io')
+        registry: gcr.io
