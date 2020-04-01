@@ -8,7 +8,7 @@ To be able to run this API on your computer, you will need:
 - Clone this repository
 - Get inside the repository folder
 - Execute ```yarn install```
-- Execute ```yarn global add nodemon``` (you might root rights!)
+- Execute ```yarn global add nodemon``` (you might need root rights!)
 
 ## Running the API
 
