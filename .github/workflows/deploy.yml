@@ -1,0 +1,24 @@
+# Continuous Deployment on every push to master.
+
+name: CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Docker Build & Push
+      uses: mr-smithers-excellent/docker-build-push@v2
+      with:
+        image: covision19-api
+        tag: latest
+        registry: gcr.io/covision19/api
+        username: ${{ secrets.DOCKER_DEPLOY_USER }}
+        password: ${{ secrets.DOCKER_DEPLOY_PWD }}
