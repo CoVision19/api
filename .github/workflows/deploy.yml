@@ -14,10 +14,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Deploy service to Cloud Run
-      uses: stefda/action-cloud-run@v1.0
+    #- name: Docker build
+     # run: docker build . --file Dockerfile --tag eu.gcr.io/covision19/api:latest
+
+    - name: Cloud Run with docker build and push to GCR
+      uses: passionkind/action-cloud-run@1.5
       with:
-        image: gcr.io/covision19/api
-        service: api-runner
+        # Set to true to check if working_directory has changes since the previous commit
+        check_if_changed: false
+        # Directory where the Dockerfile is to be found
+        working_directory: ./
+        # Cloud run service name
+        service_name: api-runner
+        # GCP service key with storage and run permissions
+        gcp_service_key: ${{ secrets.GCLOUD_AUTH }}
+        # GCP project
         project: covision19
-        service key: ${{ secrets.GCLOUD_AUTH }}
+        # GCP Registry (e.g. 'eu.gcr.io')
+        registry: eu.gcr.io
+        # GCP region
+        region: europe-west4
