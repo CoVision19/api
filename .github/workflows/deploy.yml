@@ -14,18 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cloud Run with docker build and push to GCR
-      uses: passionkind/action-cloud-run@1.5
+    - name: Deploy service to Cloud Run
+      uses: stefda/action-cloud-run@1.0.0
       with:
-        # Set to true to check if working_directory has changes since the previous commit
-        check_if_changed: false
-        # Directory where the Dockerfile is to be found
-        working_directory: ./ 
-        # Cloud run service name
-        service_name: api-runner
-        # GCP service key with storage and run permissions
-        gcp_service_key: ${{ secrets.DOCKER_DEPLOY_PWD }}
-        # GCP project
+        image: gcr.io/covision19/api
+        service: api-runner
         project: covision19
-        # GCP Registry (e.g. 'eu.gcr.io')
-        registry: gcr.io
+        service key: ${{ secrets.GCLOUD_AUTH }}
