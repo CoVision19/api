@@ -8,7 +8,7 @@ ENV PORT 3000
 ENV PATH /app/node_modules/.bin:$PATH
 
 EXPOSE $PORT
-ADD package.json yarn.lock /app/
+ADD package.json /app/
 RUN yarn install
 
 COPY . /app/

@@ -17,8 +17,8 @@ jobs:
     - name: Docker Build & Push
       uses: mr-smithers-excellent/docker-build-push@v2
       with:
-        image: covision19-api
+        image: api
         tag: latest
-        registry: gcr.io/covision19/api
+        registry: gcr.io/covision19
         username: ${{ secrets.DOCKER_DEPLOY_USER }}
         password: ${{ secrets.DOCKER_DEPLOY_PWD }}
