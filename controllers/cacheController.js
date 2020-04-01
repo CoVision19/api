@@ -1,4 +1,5 @@
 const Got = require('got');
+const csv = require("csvtojson");
 
 class CacheController {
 	constructor(startYear, startMonth, startDay) {
@@ -33,9 +34,9 @@ class CacheController {
 			tmpDate.setUTCDate(tmpDate.getUTCDate() + 1);
 		}
 		Promise.all(promises).then(res => {
-			res.forEach(elem => {
+			res.forEach(async (elem) => {
 				if (elem.content !== null || !(this.data[elem.date]))
-					this.data[elem.date] = elem.content;
+					this.data[elem.date] = await csv({ignoreColumns: /(FIPS|Combined_Key)/}).fromString(elem.content);
 			});
 			this.lastTimeFetched = new Date();
 			console.log('Cache built at ' + this.lastTimeFetched + '!\n');
