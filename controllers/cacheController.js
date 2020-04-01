@@ -27,11 +27,10 @@ class CacheController {
 		var promises = [];
 		console.log('Fetching COVID-19 data from ' + tmpDate + ' to ' + today + '...');
 		while (tmpDate < today) {
-			var date = ('0' + tmpDate.getUTCMonth()).slice(-2) + '-'
-				+ ('0' + (tmpDate.getUTCDate()+1)).slice(-2) + '-'
-				+ tmpDate.getUTCFullYear();
+			var splitter = tmpDate.toISOString().split('T')[0].split('-');
+			var date = splitter[1] + '-' + splitter[2] + '-' + splitter[0];
 			promises.push(this.myFetch(date));
-			tmpDate.setHours(tmpDate.getHours() + 24);
+			tmpDate.setUTCDate(tmpDate.getUTCDate() + 1);
 		}
 		Promise.all(promises).then(res => {
 			res.forEach(elem => {

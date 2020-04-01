@@ -9,7 +9,7 @@ require('./routes/home')({ router });
 
 // CONFIG //
 const port = 3000;
-const refreshCacheRateInMs = 5000;
+const refreshCacheRateInMs = 60 * 60 * 1000;
 
 // CACHE //
 //controller.CacheController.CreateCache(2020, 1, 22);
@@ -23,5 +23,5 @@ setInterval(function() {
 app.use(Logger());
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen(port);
-console.log('Server started, listening on port ' + port);
+app.listen(process.env.PORT || port);
+console.log('Server started, listening on port ' + (process.env.PORT || port));
