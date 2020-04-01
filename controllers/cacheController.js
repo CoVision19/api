@@ -36,7 +36,7 @@ class CacheController {
 		Promise.all(promises).then(res => {
 			res.forEach(async (elem) => {
 				if (elem.content !== null || !(this.data[elem.date]))
-					this.data[elem.date] = await csv({ignoreColumns: /(FIPS|Combined_Key)/}).fromString(elem.content);
+					this.data[elem.date] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Combined_Key)/}).fromString(elem.content));
 			});
 			this.lastTimeFetched = new Date();
 			console.log('Cache built at ' + this.lastTimeFetched + '!\n');
