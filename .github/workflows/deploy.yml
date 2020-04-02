@@ -13,24 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
-    #- name: Docker build
-     # run: docker build . --file Dockerfile --tag eu.gcr.io/covision19/api:latest
-
-    - name: Cloud Run with docker build and push to GCR
-      uses: passionkind/action-cloud-run@1.5
+    - name: Build, Push and Deploy service to Google Cloud Run
+      uses: ThomFree/action-cloud-run@1.0
       with:
-        # Set to true to check if working_directory has changes since the previous commit
-        check_if_changed: false
-        # Directory where the Dockerfile is to be found
-        working_directory: ./
-        # Cloud run service name
-        service_name: api-runner
-        # GCP service key with storage and run permissions
-        gcp_service_key: ${{ secrets.GCLOUD_AUTH }}
-        # GCP project
+        image: gcr.io/covision19/api
+        service: api-runner
         project: covision19
-        # GCP Registry (e.g. 'eu.gcr.io')
-        registry: eu.gcr.io
-        # GCP region
-        region: europe-west4
+        region: us-west1
+        service key: ${{ secrets.GCLOUD_AUTH }}
