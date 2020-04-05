@@ -14,10 +14,13 @@ const refreshCacheRateInMs = 60 * 60 * 1000;
 // CACHE //
 //controller.CacheController.CreateCache(2020, 1, 22);
 controller.CacheController.CreateCache(2020, 3, 30);
+//controller.CacheController.GetCache().refreshLookupTable();
 controller.CacheController.GetCache().refreshCache();
-setInterval(function() {
-	controller.CacheController.GetCache().refreshCache();
-}, refreshCacheRateInMs);
+console.log( controller.CacheController.GetCache().lookupTable );
+
+//setInterval(function() {
+//	controller.CacheController.GetCache().refreshCache();
+//}, refreshCacheRateInMs);
 
 // HTTP SERVER //
 app.use(Logger());

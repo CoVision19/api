@@ -15,4 +15,13 @@ module.exports = ({ router }) => {
 			cache: controller.CacheController.GetCache().data
 		};
 	});
+	
+	// JOSH DEBUG: Just for testing. Please remove.
+	// 
+	router.get('/lookupTable/', (ctx, next) => {
+		ctx.body = {
+			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched,
+			lookupTable: controller.CacheController.GetCache().lookupTable
+		};
+	});
 }
