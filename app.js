@@ -16,7 +16,6 @@ const refreshCacheRateInMs = 60 * 60 * 1000;
 controller.CacheController.CreateCache(2020, 3, 30);
 //controller.CacheController.GetCache().refreshLookupTable();
 controller.CacheController.GetCache().refreshCache();
-console.log( controller.CacheController.GetCache().lookupTable );
 
 //setInterval(function() {
 //	controller.CacheController.GetCache().refreshCache();
