@@ -5,8 +5,8 @@ const controller = require('./controllers/cacheController');
 
 const app = new Koa();
 const router = new Router();
-const timelineRouter = new Router();
-const locationRouter = new Router();
+const timelineRouter = new Router( {prefix: '/timeline'});
+const locationRouter = new Router( {prefix: '/location'});
 require('./routes/home')({ router });
 require('./routes/timeline')({timelineRouter});
 //require('./routes/location')({locationRouter});

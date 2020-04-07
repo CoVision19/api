@@ -2,7 +2,7 @@ const controller = require('../controllers/cacheController');
 
 module.exports = ({ timelineRouter }) => {
 
-	timelineRouter.get('/timeline/date/:date', (ctx, next) => {
+	timelineRouter.get('/date/:date', (ctx, next) => {
         var dateObj = new Date(ctx.params.date);
 
         // If date is invalid, dateObj.getTime() returns NaN, which is never equal to itself
@@ -31,7 +31,7 @@ module.exports = ({ timelineRouter }) => {
         }
     });
 
-    timelineRouter.get('/timeline/daterange/:range', (ctx, next) => {
+    timelineRouter.get('/daterange/:range', (ctx, next) => {
         var datesValid = true;        
         var dates = ctx.params.range.split('_');
         var startDateObj;
