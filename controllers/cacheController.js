@@ -42,11 +42,13 @@ class CacheController {
 				}
 				Promise.all(promises).then(res => {
 					res.forEach(async (elem) => {
-						if (elem.content !== null || !(this.data[elem.date])) {
-							this.data[elem.date] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Admin2|Province_State,Country_Region,Last_Update)/}).fromString(elem.content));
+						var splitDate = elem.date.split('-');
+						var dateKey = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
+						if (elem.content !== null || !(this.data[dateKey])) {
+							this.data[dateKey] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Admin2|Province_State,Country_Region,Last_Update)/}).fromString(elem.content));
 							this.lookupTable.forEach( entry => {
-								if (this.data[elem.date] !== null){
-									this.data[elem.date].forEach( region => {
+								if (this.data[dateKey] !== null){
+									this.data[dateKey].forEach( region => {
 										if (entry.Lat == region.Lat && entry.Long_ == region.Long_) {
 											region.UID = entry.UID;
 											delete region.Lat;
