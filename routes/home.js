@@ -8,20 +8,10 @@ module.exports = ({ router }) => {
 		var time = today.getUTCHours() + ":" + today.getUTCMinutes() + ":" + today.getUTCSeconds();
 
 		ctx.body = {
-			message: (controller.CacheController.GetCache().data == {} ? 'CoVision19 API up and running! No data fetched yet.' : 'CoVision19 API up and running! Data available.'),
+			message: (controller.CacheController.GetCache().lastTimeFetched === null ? 'CoVision19 API up and running! No data fetched yet.' : 'CoVision19 API up and running! Data available.'),
 			date: date,
 			time: time,
-			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched,
-			cache: controller.CacheController.GetCache().data
-		};
-	});
-	
-	// JOSH DEBUG: Just for testing. Please remove.
-	// 
-	router.get('/lookupTable/', (ctx, next) => {
-		ctx.body = {
-			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched,
-			lookupTable: controller.CacheController.GetCache().lookupTable
+			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched
 		};
 	});
 }
