@@ -23,6 +23,19 @@ class CacheController {
 		return CacheController.instance;
 	}
 
+	// Member functions
+	isValidDate(dateStr) {
+		var dateObj = new Date(dateStr);
+
+		// If date is invalid, dateObj.getTime() returns NaN, which is never equal to itself
+        //
+        return (dateStr.match(/\d{4}-\d{2}-\d{2}/) && dateObj.getTime() === dateObj.getTime());
+	}
+
+	isDateInCache(dateStr) {
+		return (dateStr in this.data);
+	}
+
 	refreshCache() {
 		var tmpDate = new Date(this.startDate);
 		var today = new Date();
@@ -45,7 +58,7 @@ class CacheController {
 						var splitDate = elem.date.split('-');
 						var dateKey = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
 						if (elem.content !== null || !(this.data[dateKey])) {
-							this.data[dateKey] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Admin2|Province_State,Country_Region,Last_Update)/}).fromString(elem.content));
+							this.data[dateKey] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Admin2|Province_State|Country_Region|Last_Update|Combined_Key)/}).fromString(elem.content));
 							this.lookupTable.forEach( entry => {
 								if (this.data[dateKey] !== null) {
 									this.data[dateKey].forEach( region => {

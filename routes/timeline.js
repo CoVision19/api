@@ -3,30 +3,33 @@ const controller = require('../controllers/cacheController');
 module.exports = ({ timelineRouter }) => {
 
 	timelineRouter.get('/date/:date', (ctx, next) => {
-        var dateObj = new Date(ctx.params.date);
+        const cache = controller.CacheController.GetCache();
+        let data = {}
 
-        // If date is invalid, dateObj.getTime() returns NaN, which is never equal to itself
-        //
-        if (ctx.params.date.match(/\d{4}-\d{2}-\d{2}/) && dateObj.getTime() === dateObj.getTime()) {
-            if (!controller.CacheController.GetCache().data) {
-                ctx.body = {
-                    status: 404,
-                    message: 'Cache not found'
-                }
-            }
-            else {
-                let msg = {}
-                msg[ctx.params.date] = controller.CacheController.GetCache().data[ctx.params.date];
-                ctx.body = {
-                    status: 200,
-                    message: msg
-                };
-            }
-        }
-        else {
+        if (cache.isValidDate(ctx.params.date) && cache.isDateInCache(ctx.params.date)) {
+            data[ctx.params.date] = cache.data[ctx.params.date];
+            ctx.body = {
+                status: 200,
+                message: 'Success.',
+                data: data
+            };
+        } else if (cache.isValidDate(ctx.params.date) && !cache.isDateInCache(ctx.params.date)) {
+            ctx.response.status = 404;
+            ctx.body = {
+                status: 404,
+                message: 'Date not in cache.'
+            };
+        } else if (!cache.isValidDate(ctx.params.date)) {
+            ctx.response.status = 400;
             ctx.body = {
                 status: 400,
-                message: 'Not a valid date'
+                message: 'Not a valid date.'
+            }
+        } else {
+            ctx.response.status = 400;
+            ctx.body = {
+                status: 400,
+                message: 'Invalid request.'
             }
         }
     });
