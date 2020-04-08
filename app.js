@@ -13,7 +13,7 @@ require('./routes/location')({ locationRouter });
 
 // CONFIG //
 const port = 3000;
-const refreshCacheRateInMs = 60 * 60 * 1000;
+const refreshCacheRateInMs = 6 * 60 * 60 * 1000;
 
 // CACHE //
 controller.CacheController.CreateCache(2020, 3, 2);
