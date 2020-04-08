@@ -40,14 +40,14 @@ class CacheController {
 					promises.push(this.myFetch(this.formatDate(tmpDate)));
 					tmpDate.setUTCDate(tmpDate.getUTCDate() + 1);
 				}
-				Promise.all(promises).then(res => {
-					res.forEach(async (elem) => {
+				Promise.all(promises).then(async res => {
+					await this.awaitForEach(res, async (elem) => {
 						var splitDate = elem.date.split('-');
 						var dateKey = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
 						if (elem.content !== null || !(this.data[dateKey])) {
 							this.data[dateKey] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Admin2|Province_State,Country_Region,Last_Update)/}).fromString(elem.content));
 							this.lookupTable.forEach( entry => {
-								if (this.data[dateKey] !== null){
+								if (this.data[dateKey] !== null) {
 									this.data[dateKey].forEach( region => {
 										if (entry.Lat == region.Lat && entry.Long_ == region.Long_) {
 											region.UID = entry.UID;
@@ -105,6 +105,12 @@ class CacheController {
 		var splitter = date.toISOString().split('T')[0].split('-');
 		return splitter[1] + '-' + splitter[2] + '-' + splitter[0];
 	}
+
+	async awaitForEach(array, callback) {
+		for (let index = 0; index < array.length; index++) {
+		  await callback(array[index], index, array);
+		}
+	  }
 }
 
 module.exports = {

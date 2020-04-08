@@ -8,11 +8,10 @@ module.exports = ({ router }) => {
 		var time = today.getUTCHours() + ":" + today.getUTCMinutes() + ":" + today.getUTCSeconds();
 
 		ctx.body = {
-			message: (controller.CacheController.GetCache().data == {} ? 'CoVision19 API up and running! No data fetched yet.' : 'CoVision19 API up and running! Data available.'),
+			message: (controller.CacheController.GetCache().lastTimeFetched === null ? 'CoVision19 API up and running! No data fetched yet.' : 'CoVision19 API up and running! Data available.'),
 			date: date,
 			time: time,
-			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched,
-			cache: controller.CacheController.GetCache().data
+			lastCacheUpdate: controller.CacheController.GetCache().lastTimeFetched
 		};
 	});
 }
