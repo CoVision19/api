@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const Logger = require('koa-logger');
 const controller = require('./controllers/cacheController');
+const cors = require('@koa/cors');
 
 const app = new Koa();
 const router = new Router();
@@ -26,6 +27,7 @@ setInterval(function() {
 
 // HTTP SERVER //
 app.use(Logger());
+app.use(cors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(timelineRouter.routes());
