@@ -7,9 +7,9 @@ module.exports = ({ timelineRouter }) => {
         let data = {}
 
         if (cache.lastTimeFetched === null) {
-            ctx.response.status = 204;
+            ctx.response.status = 503;
             ctx.body = {
-                status: 204,
+                status: 503,
                 message: 'Cache not ready.'
             }
             return;
@@ -48,9 +48,9 @@ module.exports = ({ timelineRouter }) => {
         var dates = ctx.params.range.split('_');
 
         if (cache.lastTimeFetched === null) {
-            ctx.response.status = 204;
+            ctx.response.status = 503;
             ctx.body = {
-                status: 204,
+                status: 503,
                 message: 'Cache not ready.'
             }
             return;

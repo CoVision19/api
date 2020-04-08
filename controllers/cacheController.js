@@ -36,17 +36,21 @@ class CacheController {
 		return (dateStr in this.data);
 	}
 
+	isAlmostEqual(nbr1, nbr2) {
+		return Math.abs(nbr1 - nbr2) <= 0.0001
+	}
+
 	refreshCache() {
 		var tmpDate = new Date(this.startDate);
 		var today = new Date();
 		var promises = [];
 		var lookupPromise;
+		var startUID = 90000000;
 
-		console.log('Fetching lookup table data...');
 		lookupPromise = this.fetchLookupTable();
 		lookupPromise.then(async (res) => {
 			if (res.content !== null) {
-				this.lookupTable = await csv().fromString(res.content);
+				this.lookupTable = await csv({ignoreColumns: /(iso2|iso3|code3)/}).fromString(res.content);
 
 				console.log('Fetching COVID-19 data from ' + tmpDate + ' to ' + today + '...');
 				while (tmpDate < today) {
@@ -58,20 +62,48 @@ class CacheController {
 						var splitDate = elem.date.split('-');
 						var dateKey = splitDate[2] + '-' + splitDate[0] + '-' + splitDate[1];
 						if (elem.content !== null || !(this.data[dateKey])) {
-							this.data[dateKey] = (elem.content === null ? null : await csv({ignoreColumns: /(FIPS|Admin2|Province_State|Country_Region|Last_Update|Combined_Key)/}).fromString(elem.content));
-							this.lookupTable.forEach( entry => {
-								if (this.data[dateKey] !== null) {
-									this.data[dateKey].forEach( region => {
-										if (entry.Lat == region.Lat && entry.Long_ == region.Long_) {
+							//var columns = /(FIPS|Admin2|Province_State|Country_Region|Last_Update|Combined_Key|Province\/State|Country\/Region|Last\ Update)/
+							this.data[dateKey] = (elem.content === null ? null : await csv().fromString(elem.content));
+							if (this.data[dateKey] !== null) {
+								this.data[dateKey].forEach( region => {
+									this.lookupTable.forEach( entry => {
+										if ((this.isAlmostEqual(entry.Lat, region.Lat) && this.isAlmostEqual(entry.Long_, region.Long_)) ||
+											(this.isAlmostEqual(entry.Lat, region.Latitude) && this.isAlmostEqual(entry.Long_, region.Longitude))) {
 											region.UID = entry.UID;
-											delete region.Lat;
-											delete region.Long_;
 										}
 									});
-								}
-							});
+									if (!region.UID) {
+										var newRegion = {
+											UID: startUID,
+											Lat: region.Lat || region.Latitude || '',
+											Long_: region.Long_ || region.Longitude || '',
+											FIPS: region.FIPS || '',
+											Admin2: region.Admin2 || '',
+											Province_State: region.Province_State || region['Province/State'] || '',
+											Country_Region: region.Country_Region || region['Country/Region'] || '',
+											Combined_Key: region.Combined_Key || ''
+										}
+										this.lookupTable.push(newRegion);
+										region.UID = toString(startUID);
+										startUID += 1;
+									}
+									delete region.Lat;
+									delete region.Long_;
+									delete region.Latitude;
+									delete region.Longitude;
+									delete region.FIPS;
+									delete region.Admin2;
+									delete region.Province_State;
+									delete region.Country_Region;
+									delete region.Last_Update;
+									delete region.Combined_Key;
+									delete region['Province/State'];
+									delete region['Country/Region'];
+									delete region['Last Update'];
+								});
+							}
 						}
-				
+						console.log('Parsed: ' + dateKey);
 					});
 
 					this.lastTimeFetched = new Date();

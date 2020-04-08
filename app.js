@@ -9,14 +9,14 @@ const timelineRouter = new Router( {prefix: '/timeline'});
 const locationRouter = new Router( {prefix: '/location'});
 require('./routes/home')({ router });
 require('./routes/timeline')({ timelineRouter });
-//require('./routes/location')({locationRouter});
+require('./routes/location')({ locationRouter });
 
 // CONFIG //
 const port = 3000;
 const refreshCacheRateInMs = 60 * 60 * 1000;
 
 // CACHE //
-controller.CacheController.CreateCache(2020, 3, 1);
+controller.CacheController.CreateCache(2020, 3, 2);
 //controller.CacheController.CreateCache(2020, 4, 6);
 controller.CacheController.GetCache().refreshCache();
 
@@ -30,8 +30,8 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(timelineRouter.routes());
 app.use(timelineRouter.allowedMethods());
-//app.use(locationRouter.routes());
-//app.use(locationRouter.allowedMethods());
+app.use(locationRouter.routes());
+app.use(locationRouter.allowedMethods());
 
 app.listen(process.env.PORT || port);
 console.log('Server started, listening on port ' + (process.env.PORT || port));
