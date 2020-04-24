@@ -13,11 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build, Push and Deploy service to Google Cloud Run
-      uses: ThomFree/action-build-cloud-run@1.1
+    - name: Build and push to GCR
+      uses: ThomFree/action_build_push_gcr@1.0
       with:
         image: gcr.io/covision19/api
-        service: api-runner
         project: covision19
-        region: us-west1
+        region: us-west-1
         service key: ${{ secrets.GCLOUD_AUTH }}
