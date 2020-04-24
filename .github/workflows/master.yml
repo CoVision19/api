@@ -32,4 +32,6 @@ jobs:
           ssh deploy-bot@covision19.thedoux.fr -i ./private.key gcloud auth configure-docker
           ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker pull gcr.io/covision19/api
       - name: Run docker image
-        run: ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker run gcr.io/covision19/api -p 8080:8080 --env PORT=8080
+        run: |
+          ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker stop gcr.io/covision19/api
+          ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker run gcr.io/covision19/api -p 8080:8080 --env PORT=8080
