@@ -22,12 +22,16 @@ jobs:
         service key: ${{ secrets.GCLOUD_AUTH }}
 
   deploy:
+    needs: build_push
+    env:
+      DEPLOY_SSHKEY: ${{ secrets.DEPLOY_SSHKEY }}
+      GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
     runs-on: ubuntu-latest
     steps:
       - name: Pull docker image
         run: |
-          echo "${{ secrets.DEPLOY_SSHKEY }}" > private.key
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key echo "${{ secrets.GCLOUD_AUTH }}" | base64 --decode > gcloud.json
+          echo "$DEPLOY_SSHKEY" > private.key
+          ssh deploy-bot@covision19.thedoux.fr -i ./private.key echo "$GCLOUD_AUTH" | base64 --decode > gcloud.json
           ssh deploy-bot@covision19.thedoux.fr -i ./private.key gcloud auth activate-service-account --key-file=gcloud.json --project covision19
           ssh deploy-bot@covision19.thedoux.fr -i ./private.key gcloud auth configure-docker
           ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker pull gcr.io/covision19/api
