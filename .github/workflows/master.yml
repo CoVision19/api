@@ -31,6 +31,7 @@ jobs:
       - name: Pull docker image
         run: |
           echo "$DEPLOY_SSHKEY" > private.key
+          chmod 400 ./private.key
           ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key echo "$GCLOUD_AUTH" | base64 --decode > gcloud.json
           ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key gcloud auth activate-service-account --key-file=gcloud.json --project covision19
           ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key gcloud auth configure-docker
