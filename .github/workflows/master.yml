@@ -31,11 +31,11 @@ jobs:
       - name: Pull docker image
         run: |
           echo "$DEPLOY_SSHKEY" > private.key
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key echo "$GCLOUD_AUTH" | base64 --decode > gcloud.json
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key gcloud auth activate-service-account --key-file=gcloud.json --project covision19
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key gcloud auth configure-docker
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker pull gcr.io/covision19/api
+          ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key echo "$GCLOUD_AUTH" | base64 --decode > gcloud.json
+          ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key gcloud auth activate-service-account --key-file=gcloud.json --project covision19
+          ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key gcloud auth configure-docker
+          ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key docker pull gcr.io/covision19/api
       - name: Run docker image
         run: |
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker stop gcr.io/covision19/api
-          ssh deploy-bot@covision19.thedoux.fr -i ./private.key docker run gcr.io/covision19/api -p 8080:8080 --env PORT=8080
+          ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key docker stop gcr.io/covision19/api
+          ssh deploy-bot@covision19.thedoux.fr -o StrictHostKeyChecking=no -i ./private.key docker run gcr.io/covision19/api -p 8080:8080 --env PORT=8080
