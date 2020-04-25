@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@koa/cors": "2",
+    "crypto": "^1.0.1",
     "csvtojson": "^2.0.10",
     "got": "^10.7.0",
     "koa": "^2.11.0",
