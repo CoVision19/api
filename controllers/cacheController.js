@@ -138,7 +138,9 @@ class CacheController {
 		let prom = new Promise((resolve, reject) => {
 			Got(this.baseURL + 'csse_covid_19_daily_reports/' + dateString + '.csv').then(res => {
 				console.log('Fetched: ' + date);
-				if (res.body && !this.isHashSame(date, res.body)) {
+				// DEBUG
+				console.log('HASHING part:' + this.isHashSame(date, JSON.stringify(res.body)));
+				if (res.body && !this.isHashSame(date, JSON.stringify(res.body))) {
 					this.addHash(date, JSON.stringify(res.body));
 					resolve({ date: date, content: res.body });
 				}
@@ -185,7 +187,12 @@ class CacheController {
 	}
 
 	isHashSame(date, str) {
+		if (!str || str === null)
+			return false;
 		let hashToCheck = Crypto.createHash('sha1').update(str).digest('hex');
+		// DEBUG
+		console.log("NEW HASH:" + hashToCheck);
+		console.log("EXISTING HASH IN TABLE: " + this.checksums[date]);
 		return (date in this.checksums && this.checksums[date] === hashToCheck);
 	}
 }
