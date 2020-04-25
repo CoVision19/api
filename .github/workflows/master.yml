@@ -19,13 +19,13 @@ jobs:
         image: gcr.io/covision19/api
         project: covision19
         region: us-west-1
-        service key: ${{ secrets.GCLOUD_AUTH }}
+        service key: ${{ secrets.GCLOUD_AUTH_UPLOAD }}
 
   deploy:
     needs: build_push
     env:
       DEPLOY_SSHKEY: ${{ secrets.DEPLOY_SSHKEY }}
-      GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+      GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH_RETRIEVE }}
     runs-on: ubuntu-latest
     steps:
       - name: Pull docker image
