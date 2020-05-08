@@ -52,6 +52,9 @@ class CacheController {
 		lookupPromise.then(async (res) => {
 			if (res.content !== null) {
 				this.lookupTable = await csv({ ignoreColumns: /(iso2|iso3|code3)/ }).fromString(res.content);
+				this.lookupTable.forEach(elem => {
+					elem.UID = parseInt(elem.UID);
+				});
 
 				console.log('Fetching COVID-19 data from ' + tmpDate + ' to ' + today + '...');
 				while (tmpDate < today) {
@@ -106,8 +109,10 @@ class CacheController {
 							Country_Region: region.Country_Region || region['Country/Region'] || '',
 							Combined_Key: region.Combined_Key || ''
 						}
+						console.log('Created new region:');
+						console.log(newRegion);
 						this.lookupTable.push(newRegion);
-						region.UID = toString(this.startUID);
+						region.UID = this.startUID;
 						this.startUID += 1;
 					}
 					delete region.Lat;
